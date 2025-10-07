@@ -7,7 +7,8 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 ## Phase 1: Setup Tasks
 
 **T001. [Setup] Initialize project repository and environment**
-- Clone repo, checkout feature branch, ensure Java 17+, PostgreSQL 14+, Docker, Gradle.
+- Clone repo, checkout feature branch, 
+- Initialize Spring Boot project with dependencies (Spring Web, Spring Data JPA, PostgreSQL Driver, Flyway/Liquibase, OpenAPI) ensure Java 17+, PostgreSQL 14+, Docker, Gradle(build.gradle.kts)..
 - Configure DB connection in `application.yml`/`properties`.
 
 **T002. [Setup] Add and configure Flyway/Liquibase for DB migrations**
@@ -107,5 +108,4 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 
 ---
 
-**Each user story is independently testable per acceptance criteria.**
 
