@@ -1,0 +1,144 @@
+openapi: 3.0.3
+info:
+  title: Hotel Booking API
+  version: 1.0.0
+  description: REST API for hotel booking with membership discounts and cancellation policy
+servers:
+  - url: /api/v1
+paths:
+  /bookings:
+    post:
+      summary: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Booking created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          description: Invalid input
+  /bookings/{bookingId}/cancel:
+    post:
+      summary: Cancel a booking
+      parameters:
+        - in: path
+          name: bookingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Booking cancelled, refund/penalty calculated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancellationResponse'
+        '404':
+          description: Booking not found
+  /bookings/{bookingId}/refund-preview:
+    get:
+      summary: Calculate refund/penalty for a booking (preview)
+      parameters:
+        - in: path
+          name: bookingId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Refund/penalty calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundPreviewResponse'
+        '404':
+          description: Booking not found
+components:
+  schemas:
+    BookingRequest:
+      type: object
+      required:
+        - roomId
+        - checkIn
+        - checkOut
+      properties:
+        roomId:
+          type: string
+        checkIn:
+          type: string
+          format: date-time
+        checkOut:
+          type: string
+          format: date-time
+    BookingResponse:
+      type: object
+      properties:
+        bookingId:
+          type: string
+        userId:
+          type: string
+        roomId:
+          type: string
+        checkIn:
+          type: string
+          format: date-time
+        checkOut:
+          type: string
+          format: date-time
+        membershipLevel:
+          type: string
+          enum: [CLASSIC, GOLD, DIAMOND]
+        totalAmount:
+          type: number
+          format: double
+        discountAmount:
+          type: number
+          format: double
+        finalAmount:
+          type: number
+          format: double
+        status:
+          type: string
+          enum: [ACTIVE, CANCELLED]
+    CancellationResponse:
+      type: object
+      properties:
+        bookingId:
+          type: string
+        cancelledAt:
+          type: string
+          format: date-time
+        refundAmount:
+          type: number
+          format: double
+        penaltyAmount:
+          type: number
+          format: double
+        refundStatus:
+          type: string
+          enum: [PENDING, COMPLETED, FAILED]
+    RefundPreviewResponse:
+      type: object
+      properties:
+        bookingId:
+          type: string
+        calculationTime:
+          type: string
+          format: date-time
+        refundAmount:
+          type: number
+          format: double
+        penaltyAmount:
+          type: number
+          format: double
+        policyTier:
+          type: string
+          enum: [FULL, PARTIAL, NONE]
+

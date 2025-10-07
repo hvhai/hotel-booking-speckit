@@ -1,0 +1,10 @@
+.DS_STORE
+.gradle
+.idea
+app/build
+app/bin
+env/
+participationapp.log
+shared-local-instance.db
+app/target/citrus-reports
+.vscode/

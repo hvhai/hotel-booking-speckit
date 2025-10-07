@@ -1,50 +1,47 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+------------------
+Version change: undefined → 1.0.0
+Modified principles: all added (RESTful Design, Spring Boot & JPA Standardization, Test-Driven Development, API Documentation & Contract, Observability & Error Handling)
+Added sections: Technical Constraints, Development Workflow
+Removed sections: none
+Templates requiring updates:
+- plan-template.md: ✅ generic, no update needed
+- spec-template.md: ✅ generic, no update needed
+- tasks-template.md: ✅ generic, no update needed
+- commands/: ⚠ not found, none updated
+- README.md: ⚠ not found
+- docs/quickstart.md: ⚠ not found
+Follow-up TODOs:
+- TODO(RATIFICATION_DATE): original adoption date unknown, must be set on first ratification
+-->
+
+# Hotel Booking API Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. RESTful Design
+All endpoints MUST follow REST conventions, use standard HTTP verbs, and provide clear resource-oriented URIs. Resource representations are exchanged in JSON. Hypermedia is not required, but consistent URI structure and statelessness are mandatory.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Spring Boot & JPA Standardization
+All business logic MUST be implemented using Spring Boot 3. Persistence MUST use Spring Data JPA. The only supported database is PostgreSQL. No other frameworks or databases are permitted for core service logic or persistence.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-Driven Development
+All features MUST be developed using TDD. Tests are written before implementation. Coverage includes unit, integration, and API contract tests. No code is merged without passing tests and review. Red-Green-Refactor cycle is strictly enforced.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. API Documentation & Contract
+Every endpoint MUST be documented using OpenAPI/Swagger. API contracts are versioned. Any breaking change requires a new version and explicit review. Documentation must be updated with every change.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Observability & Error Handling
+All services MUST provide structured logging, health endpoints, and error responses in JSON format. No stack traces or sensitive information may be exposed in error responses. Logs must be sufficient for debugging and monitoring.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Technical Constraints
+Only Java 17+ is permitted. Spring Boot 3.x and Spring Data JPA are mandatory. PostgreSQL 14+ is the only supported database. All dependencies must be open source and approved by the project maintainers. No proprietary or unsupported libraries are allowed.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+All code changes require pull request review. Continuous Integration (CI) must pass all tests before merge. Deployments are only permitted from the main branch. Code style is enforced via Checkstyle and Spotless. All contributors must follow the constitution and technical constraints.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This constitution supersedes all other practices. Amendments require a pull request, review, and a migration plan if breaking. All PRs must verify compliance with the constitution. Complexity must be justified. The constitution version must be incremented according to semantic versioning rules. Use this file as the single source of truth for project governance.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date unknown | **Last Amended**: 2025-10-07
