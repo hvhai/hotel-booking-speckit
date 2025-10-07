@@ -11,7 +11,7 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 - Initialize Spring Boot project with dependencies (Spring Web, Spring Data JPA, PostgreSQL Driver, Flyway/Liquibase, OpenAPI) ensure Java 17+, PostgreSQL 14+, Docker, Gradle(build.gradle.kts)..
 - Configure DB connection in `application.yml`/`properties`.
 
-**T002. [Setup] Add and configure Flyway/Liquibase for DB migrations**
+**T002. [X] Add and configure Flyway/Liquibase for DB migrations**
 - Set up migration scripts for initial schema.
 
 **T003. [Setup] Set up CI pipeline for build, test, and code style**
@@ -21,7 +21,7 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 
 ## Phase 2: Foundational Tasks
 
-**T004. [Foundational] Implement base domain entities and repositories**
+**T004. [X] Implement base domain entities and repositories**
 - User, Room, Booking, Cancellation entities (per data-model.md).
 - JPA repositories for each.
 
@@ -107,5 +107,3 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 - Complete through US1 (T001–T011): Booking with membership discount, tested and documented.
 
 ---
-
-
