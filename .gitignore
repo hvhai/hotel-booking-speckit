@@ -8,3 +8,5 @@ participationapp.log
 shared-local-instance.db
 app/target/citrus-reports
 .vscode/
+# Ignore Gradle build output directory
+build
