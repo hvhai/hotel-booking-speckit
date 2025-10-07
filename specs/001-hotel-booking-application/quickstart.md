@@ -7,7 +7,7 @@
 - Java 17+
 - PostgreSQL 14+
 - Docker (for Testcontainers)
-- Maven or Gradle
+- Gradle (gradlew wrapper included and build.gradle.kts provided)
 
 ## Setup
 1. Clone the repository and checkout the feature branch:
@@ -19,8 +19,6 @@
 
 ## Running the Application
 ```sh
-./mvnw spring-boot:run
-# or
 ./gradlew bootRun
 ```
 
@@ -32,8 +30,6 @@
 ## Testing
 - Run all tests (unit, integration, contract):
   ```sh
-  ./mvnw test
-  # or
   ./gradlew test
   ```
 - Integration tests use Testcontainers for isolated Postgres DB

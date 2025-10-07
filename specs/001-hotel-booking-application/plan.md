@@ -17,7 +17,6 @@ Implement a RESTful hotel booking service with membership discounts (classic/gol
 **Testing**: JUnit 5, Mockito, Testcontainers  
 **Target Platform**: Linux server (cloud or on-prem)  
 **Project Type**: web (REST API backend)  
-**Performance Goals**: <200ms p95 response time for booking/cancellation endpoints (target based on research: support at least 100 concurrent users and 1000 bookings/day; revisit as real data emerges)  
 **Constraints**: Must follow constitution (RESTful, TDD, OpenAPI docs, error handling, code style, only approved open source dependencies)  
 **Scale/Scope**: Initial target: 100 concurrent users, 1000 bookings/day; system is cloud-native and scalable. Revisit as usage data emerges.
 
@@ -51,48 +50,24 @@ specs/001-hotel-booking-application/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+holtel-booking-speckit/
+│
+├── api/                  # REST interface contracts, DTOs, OpenAPI specs
+├── app/                  # Application/service core logic (use cases)
+├── domain/               # Domain model (entities, value objects, aggregates)
+├── infrastructure/       # External integrations (DB, messaging, file, etc.)
+├── config/               # Centralized configuration (Spring, security, profiles)
+├── test/                 # Unit, integration, and acceptance tests
+├── scripts/              # DB migrations, infra provisioning scripts (Flyway/Liquibase, Terraform, etc.)
+├── docs/                 # Architecture, ADRs, API documentation
+├── .github/              # CI/CD, DevSecOps workflows (GitHub Actions, security scans)
+├── Dockerfile            # Containerization (if applicable)
+├── build.gradle.kts  # Dependency and build management
+└── README.md             # Project overview
 ```
+
 
 **Structure Decision**: [Document the selected structure and reference the real
 directories captured above]
