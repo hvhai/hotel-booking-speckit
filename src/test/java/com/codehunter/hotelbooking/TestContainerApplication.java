@@ -1,7 +1,6 @@
-package com.codehuner.hotelbooking;
+package com.codehunter.hotelbooking;
 
 
-import com.codehunter.hotelbooking.Application;
 import org.springframework.boot.SpringApplication;
 
 public class TestContainerApplication {
