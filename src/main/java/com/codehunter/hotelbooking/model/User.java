@@ -30,8 +30,19 @@ public class User {
     // Getters and setters
     // ...
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public MembershipLevel getMembershipLevel() {
+        return membershipLevel;
+    }
+
     public enum MembershipLevel {
         CLASSIC, GOLD, DIAMOND
     }
 }
-

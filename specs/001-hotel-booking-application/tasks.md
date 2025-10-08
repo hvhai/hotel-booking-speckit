@@ -25,7 +25,7 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 - User, Room, Booking, Cancellation entities (per data-model.md).
 - JPA repositories for each.
 
-**T005. [Foundational] Implement authentication (member login)**
+**T005. [X] Implement authentication (member login)**
 - Basic authentication for all endpoints.
 
 **T006. [Foundational] Set up OpenAPI/Swagger documentation**
