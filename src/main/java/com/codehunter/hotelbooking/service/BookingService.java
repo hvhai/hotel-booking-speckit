@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
@@ -32,7 +29,7 @@ public class BookingService {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
         // Calculate nights (calendar days, ignore time)
-        long nights = ChronoUnit.DAYS.between(request.getCheckIn().toLocalDate(), request.getCheckOut().toLocalDate());
+        long nights = ChronoUnit.DAYS.between(request.getCheckIn().truncatedTo(ChronoUnit.DAYS), request.getCheckOut().truncatedTo(ChronoUnit.DAYS));
         if (nights <= 0) throw new IllegalArgumentException("Check-out must be after check-in");
         BigDecimal totalAmount = room.getPricePerNight().multiply(BigDecimal.valueOf(nights));
         BigDecimal discountPercent = getDiscountPercent(user.getMembershipLevel());
@@ -41,8 +38,8 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setUser(user);
         booking.setRoom(room);
-        booking.setCheckIn(request.getCheckIn().atZone(ZoneOffset.UTC).toInstant());
-        booking.setCheckOut(request.getCheckOut().atZone(ZoneOffset.UTC).toInstant());
+        booking.setCheckIn(request.getCheckIn());
+        booking.setCheckOut(request.getCheckOut());
         booking.setTotalAmount(totalAmount);
         booking.setDiscountAmount(discountAmount);
         booking.setFinalAmount(finalAmount);

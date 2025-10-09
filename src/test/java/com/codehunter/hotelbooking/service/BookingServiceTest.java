@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,8 +45,8 @@ class BookingServiceTest {
         user.setId(UUID.randomUUID());
         request = new BookingRequest();
         request.setRoomId(room.getId());
-        request.setCheckIn(LocalDateTime.of(2025, 10, 10, 14, 0));
-        request.setCheckOut(LocalDateTime.of(2025, 10, 12, 12, 0)); // 2 nights
+        request.setCheckIn(Instant.parse("2025-10-10T14:00:00Z"));
+        request.setCheckOut(Instant.parse("2025-10-12T12:00:00Z")); // 2 nights
     }
 
     @Test
@@ -82,4 +82,3 @@ class BookingServiceTest {
         assertEquals(BigDecimal.valueOf(160.0).setScale(2), response.getFinalAmount().setScale(2));
     }
 }
-
