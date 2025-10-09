@@ -44,7 +44,7 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 
 **T009. [US1] Implement POST /api/v1/bookings endpoint**
 
-**T010. [US1] Implement invoice/summary logic**
+**T010. [X] Implement invoice/summary logic**
 - Ensure discount is itemized in response.
 
 **T011. [US1] Unit and integration tests for booking with discounts**

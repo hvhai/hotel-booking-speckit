@@ -1,11 +1,16 @@
 package com.codehunter.hotelbooking.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
 @Table(name = "rooms")
+@Getter
+@Setter
 public class Room {
     @Id
     @GeneratedValue
