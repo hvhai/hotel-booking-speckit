@@ -1,7 +1,7 @@
 package com.codehunter.hotelbooking.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -22,9 +22,9 @@ public class BookingResponse {
     /** Unique identifier for the room */
     private UUID roomId;
     /** Check-in date and time */
-    private LocalDateTime checkIn;
+    private Instant checkIn;
     /** Check-out date and time */
-    private LocalDateTime checkOut;
+    private Instant checkOut;
     /** Membership level at time of booking */
     private MembershipLevel membershipLevel;
     /**
@@ -68,16 +68,16 @@ public class BookingResponse {
     public void setRoomId(UUID roomId) {
         this.roomId = roomId;
     }
-    public LocalDateTime getCheckIn() {
+    public Instant getCheckIn() {
         return checkIn;
     }
-    public void setCheckIn(LocalDateTime checkIn) {
+    public void setCheckIn(Instant checkIn) {
         this.checkIn = checkIn;
     }
-    public LocalDateTime getCheckOut() {
+    public Instant getCheckOut() {
         return checkOut;
     }
-    public void setCheckOut(LocalDateTime checkOut) {
+    public void setCheckOut(Instant checkOut) {
         this.checkOut = checkOut;
     }
     public MembershipLevel getMembershipLevel() {

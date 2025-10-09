@@ -1,16 +1,16 @@
 package com.codehunter.hotelbooking.dto;
 
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class BookingRequest {
     @NotNull
     private UUID roomId;
     @NotNull
-    private LocalDateTime checkIn;
+    private Instant checkIn;
     @NotNull
-    private LocalDateTime checkOut;
+    private Instant checkOut;
 
     public UUID getRoomId() {
         return roomId;
@@ -18,17 +18,16 @@ public class BookingRequest {
     public void setRoomId(UUID roomId) {
         this.roomId = roomId;
     }
-    public LocalDateTime getCheckIn() {
+    public Instant getCheckIn() {
         return checkIn;
     }
-    public void setCheckIn(LocalDateTime checkIn) {
+    public void setCheckIn(Instant checkIn) {
         this.checkIn = checkIn;
     }
-    public LocalDateTime getCheckOut() {
+    public Instant getCheckOut() {
         return checkOut;
     }
-    public void setCheckOut(LocalDateTime checkOut) {
+    public void setCheckOut(Instant checkOut) {
         this.checkOut = checkOut;
     }
 }
-
