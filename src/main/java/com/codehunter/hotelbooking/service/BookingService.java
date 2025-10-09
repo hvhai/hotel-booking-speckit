@@ -17,6 +17,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -30,11 +31,8 @@ public class BookingService {
     public BookingResponse createBooking(BookingRequest request, User user) {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
-        // Calculate nights
-        long nights = Duration.between(
-                request.getCheckIn().atZone(ZoneOffset.UTC).toInstant(),
-                request.getCheckOut().atZone(ZoneOffset.UTC).toInstant()
-        ).toDays();
+        // Calculate nights (calendar days, ignore time)
+        long nights = ChronoUnit.DAYS.between(request.getCheckIn().toLocalDate(), request.getCheckOut().toLocalDate());
         if (nights <= 0) throw new IllegalArgumentException("Check-out must be after check-in");
         BigDecimal totalAmount = room.getPricePerNight().multiply(BigDecimal.valueOf(nights));
         BigDecimal discountPercent = getDiscountPercent(user.getMembershipLevel());
@@ -78,4 +76,3 @@ public class BookingService {
         }
     }
 }
-
