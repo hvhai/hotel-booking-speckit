@@ -2,6 +2,7 @@ package com.codehunter.hotelbooking.controller;
 
 import com.codehunter.hotelbooking.dto.BookingRequest;
 import com.codehunter.hotelbooking.dto.BookingResponse;
+import com.codehunter.hotelbooking.dto.CancellationResponse;
 import com.codehunter.hotelbooking.service.BookingService;
 import com.codehunter.hotelbooking.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.time.Instant;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/bookings")
@@ -34,6 +37,16 @@ public class BookingController {
         // Fetch application User from database using UserService
         com.codehunter.hotelbooking.model.User appUser = userService.findByUsername(username);
         BookingResponse response = bookingService.createBooking(request, appUser);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{bookingId}/cancel")
+    public ResponseEntity<CancellationResponse> cancelBooking(
+            @PathVariable UUID bookingId,
+            @AuthenticationPrincipal User user
+    ) {
+        // Optionally, you could check if the booking belongs to the user here
+        CancellationResponse response = bookingService.cancelBooking(bookingId, Instant.now());
         return ResponseEntity.ok(response);
     }
 }
