@@ -4,6 +4,7 @@ import com.codehunter.hotelbooking.dto.BookingRequest;
 import com.codehunter.hotelbooking.dto.BookingResponse;
 import com.codehunter.hotelbooking.service.BookingService;
 import com.codehunter.hotelbooking.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/bookings")
+@Slf4j
 public class BookingController {
     @Autowired
     private BookingService bookingService;
@@ -26,6 +28,7 @@ public class BookingController {
             @Valid @RequestBody BookingRequest request,
             @AuthenticationPrincipal User user
     ) {
+        log.info("Creating a new booking for user {}", user);
         // Retrieve username from Spring Security User
         String username = user.getUsername();
         // Fetch application User from database using UserService
