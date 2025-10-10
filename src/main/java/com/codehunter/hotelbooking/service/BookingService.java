@@ -3,6 +3,7 @@ package com.codehunter.hotelbooking.service;
 import com.codehunter.hotelbooking.dto.BookingRequest;
 import com.codehunter.hotelbooking.dto.BookingResponse;
 import com.codehunter.hotelbooking.dto.CancellationResponse;
+import com.codehunter.hotelbooking.dto.RefundPreviewResponse;
 import com.codehunter.hotelbooking.model.Booking;
 import com.codehunter.hotelbooking.model.Room;
 import com.codehunter.hotelbooking.model.User;
@@ -112,6 +113,42 @@ public class BookingService {
         booking.setUpdatedAt(cancelTime);
         bookingRepository.save(booking);
         CancellationResponse response = new CancellationResponse();
+        response.setBookingId(booking.getId());
+        response.setRefundAmount(refund);
+        response.setPenaltyAmount(penalty);
+        response.setMessage(message);
+        return response;
+    }
+
+    public RefundPreviewResponse previewRefund(UUID bookingId, Instant previewTime) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found: " + bookingId));
+        if (booking.getStatus() == Booking.Status.CANCELLED) {
+            throw new IllegalArgumentException("Booking is already cancelled");
+        }
+        if (previewTime == null) {
+            previewTime = Instant.now();
+        }
+        long hoursBeforeCheckIn = Duration.between(previewTime, booking.getCheckIn()).toHours();
+        BigDecimal refund;
+        BigDecimal penalty;
+        String message;
+        if (hoursBeforeCheckIn > 48) {
+            refund = booking.getFinalAmount();
+            penalty = BigDecimal.ZERO;
+            message = "Full refund (cancelled more than 48h before check-in)";
+        } else if (hoursBeforeCheckIn >= 24) {
+            refund = booking.getFinalAmount().multiply(BigDecimal.valueOf(0.5));
+            penalty = booking.getFinalAmount().subtract(refund);
+            message = "50% refund (cancelled 24-48h before check-in)";
+        } else if (hoursBeforeCheckIn >= 0) {
+            refund = BigDecimal.ZERO;
+            penalty = booking.getFinalAmount();
+            message = "No refund (cancelled less than 24h before check-in)";
+        } else {
+            throw new IllegalArgumentException("Cannot preview refund after check-in time");
+        }
+        RefundPreviewResponse response = new RefundPreviewResponse();
         response.setBookingId(booking.getId());
         response.setRefundAmount(refund);
         response.setPenaltyAmount(penalty);

@@ -3,6 +3,7 @@ package com.codehunter.hotelbooking.controller;
 import com.codehunter.hotelbooking.dto.BookingRequest;
 import com.codehunter.hotelbooking.dto.BookingResponse;
 import com.codehunter.hotelbooking.dto.CancellationResponse;
+import com.codehunter.hotelbooking.dto.RefundPreviewResponse;
 import com.codehunter.hotelbooking.service.BookingService;
 import com.codehunter.hotelbooking.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,16 @@ public class BookingController {
     ) {
         // Optionally, you could check if the booking belongs to the user here
         CancellationResponse response = bookingService.cancelBooking(bookingId, Instant.now());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{bookingId}/refund-preview")
+    public ResponseEntity<RefundPreviewResponse> previewRefund(
+            @PathVariable UUID bookingId,
+            @AuthenticationPrincipal User user
+    ) {
+        // Optionally, you could check if the booking belongs to the user here
+        RefundPreviewResponse response = bookingService.previewRefund(bookingId, Instant.now());
         return ResponseEntity.ok(response);
     }
 }
