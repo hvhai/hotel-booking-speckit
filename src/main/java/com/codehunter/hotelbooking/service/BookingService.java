@@ -185,6 +185,26 @@ public class BookingService {
         }).collect(Collectors.toList());
     }
 
+    public List<BookingResponse> getAllBookings() {
+        List<Booking> bookings = bookingRepository.findAll();
+        return bookings.stream().map(this::toBookingResponse).collect(Collectors.toList());
+    }
+
+    private BookingResponse toBookingResponse(Booking booking) {
+        BookingResponse response = new BookingResponse();
+        response.setBookingId(booking.getId());
+        response.setUserId(booking.getUser().getId());
+        response.setRoomId(booking.getRoom().getId());
+        response.setCheckIn(booking.getCheckIn());
+        response.setCheckOut(booking.getCheckOut());
+        response.setMembershipLevel(BookingResponse.MembershipLevel.valueOf(booking.getUser().getMembershipLevel().name()));
+        response.setTotalAmount(booking.getTotalAmount());
+        response.setDiscountAmount(booking.getDiscountAmount());
+        response.setFinalAmount(booking.getFinalAmount());
+        response.setStatus(BookingResponse.Status.valueOf(booking.getStatus().name()));
+        return response;
+    }
+
     public com.codehunter.hotelbooking.model.Booking getBookingById(UUID bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found: " + bookingId));

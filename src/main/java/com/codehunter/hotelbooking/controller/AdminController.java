@@ -5,8 +5,15 @@ import com.codehunter.hotelbooking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -14,6 +21,8 @@ import java.util.UUID;
 public class AdminController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private com.codehunter.hotelbooking.service.BookingService bookingService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -29,26 +38,62 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/bookings")
+    public ResponseEntity<List<com.codehunter.hotelbooking.dto.BookingResponse>> getAllBookings() {
+        List<com.codehunter.hotelbooking.dto.BookingResponse> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(bookings);
+    }
+
     public static class CreateUserRequest {
         private String username;
         private String password;
         private String email;
         private User.MembershipLevel membershipLevel;
+
         // getters and setters
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-        public User.MembershipLevel getMembershipLevel() { return membershipLevel; }
-        public void setMembershipLevel(User.MembershipLevel membershipLevel) { this.membershipLevel = membershipLevel; }
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public User.MembershipLevel getMembershipLevel() {
+            return membershipLevel;
+        }
+
+        public void setMembershipLevel(User.MembershipLevel membershipLevel) {
+            this.membershipLevel = membershipLevel;
+        }
     }
 
     public static class UpdateMembershipRequest {
         private User.MembershipLevel membershipLevel;
-        public User.MembershipLevel getMembershipLevel() { return membershipLevel; }
-        public void setMembershipLevel(User.MembershipLevel membershipLevel) { this.membershipLevel = membershipLevel; }
+
+        public User.MembershipLevel getMembershipLevel() {
+            return membershipLevel;
+        }
+
+        public void setMembershipLevel(User.MembershipLevel membershipLevel) {
+            this.membershipLevel = membershipLevel;
+        }
     }
 }
-
