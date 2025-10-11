@@ -37,16 +37,16 @@ class AdminControllerIntegrationTest {
     void setUp() {
         // Create an admin user in DB (simulate, as actual security config may vary)
         adminUser = new User();
-        adminUser.setUsername("admin");
+        adminUser.setUsername("adminTest");
         adminUser.setPassword("adminpass");
-        adminUser.setEmail("admin@example.com");
+        adminUser.setEmail("admin-test@example.com");
         adminUser.setMembershipLevel(User.MembershipLevel.DIAMOND);
         adminUser.setRole(User.Role.ADMIN);
         userRepository.save(adminUser);
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "adminTest", roles = {"ADMIN"})
     void testAdminCanCreateUser() throws Exception {
         String req = "{" +
                 "\"username\":\"newuser\"," +
@@ -65,7 +65,7 @@ class AdminControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "adminTest", roles = {"ADMIN"})
     void testAdminCanUpdateMembership() throws Exception {
         // Create a user to update
         User user = new User();
