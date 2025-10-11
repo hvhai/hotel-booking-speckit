@@ -71,6 +71,7 @@ class BookingControllerIntegrationTest {
         user.setEmail("test@example.com");
         user.setPassword("password"); // In real scenario, this should be encoded
         user.setMembershipLevel(User.MembershipLevel.CLASSIC);
+        user.setRole(User.Role.USER);
         userRepository.save(user);
 
         // Create a booking request
@@ -137,6 +138,7 @@ class BookingControllerIntegrationTest {
         otherUser.setEmail("other@example.com");
         otherUser.setPassword("password");
         otherUser.setMembershipLevel(User.MembershipLevel.CLASSIC);
+        otherUser.setRole(User.Role.USER);
         userRepository.save(otherUser);
 
         // Create a booking for the first user
@@ -163,12 +165,13 @@ class BookingControllerIntegrationTest {
     @Test
     void testGetMyBookings_OnlyReturnsOwnBookings() throws Exception {
         // Create and save a second user
-        User otherUser = new User();
-        otherUser.setUsername("otheruser2");
-        otherUser.setEmail("other2@example.com");
-        otherUser.setPassword("password");
-        otherUser.setMembershipLevel(User.MembershipLevel.CLASSIC);
-        userRepository.save(otherUser);
+        User otherUser2 = new User();
+        otherUser2.setUsername("otheruser2");
+        otherUser2.setEmail("other2@example.com");
+        otherUser2.setPassword("password");
+        otherUser2.setMembershipLevel(User.MembershipLevel.CLASSIC);
+        otherUser2.setRole(User.Role.USER);
+        userRepository.save(otherUser2);
 
         // Create a booking for the first user
         BookingRequest req1 = new BookingRequest();
@@ -189,7 +192,7 @@ class BookingControllerIntegrationTest {
         mockMvc.perform(post("/api/v1/bookings")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req2))
-                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(otherUser.getUsername())))
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(otherUser2.getUsername())))
                 .andExpect(status().isOk());
 
         // Get bookings for the first user

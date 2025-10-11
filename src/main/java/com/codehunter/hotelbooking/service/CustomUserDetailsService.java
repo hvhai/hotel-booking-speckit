@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
             .password(user.getPassword())
-            .roles(user.getMembershipLevel().name())
+            .roles(user.getRole().name())
             .build();
     }
 }

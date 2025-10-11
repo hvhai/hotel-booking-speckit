@@ -39,6 +39,7 @@ public class ApplicationBootstrapper implements ApplicationListener<ContextRefre
         log.info("Application started");
         createIfNotExists("user1", "user1@example.com");
         createIfNotExists("user2", "user2@example.com");
+        createAdminIfNotExists("admin", "admin@example.com");
 
         createRoomIfNotExists("101", "Single", new java.math.BigDecimal("100.00"));
         createRoomIfNotExists("102", "Double", new java.math.BigDecimal("150.00"));
@@ -57,6 +58,21 @@ public class ApplicationBootstrapper implements ApplicationListener<ContextRefre
             user.setCreatedAt(Instant.now());
             user.setUpdatedAt(Instant.now());
             userRepository.save(user);
+        }
+    }
+
+    private void createAdminIfNotExists(String username, String email) {
+        if (!userRepository.existsByUsername(username)) {
+            User user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(passwordEncoder.encode(defaultPassword));
+            user.setMembershipLevel(MembershipLevel.DIAMOND);
+            user.setRole(User.Role.ADMIN);
+            user.setCreatedAt(Instant.now());
+            user.setUpdatedAt(Instant.now());
+            userRepository.save(user);
+            log.info("Created admin user: {}", username);
         }
     }
 

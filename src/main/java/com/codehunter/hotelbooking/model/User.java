@@ -29,6 +29,10 @@ public class User {
     @Column(nullable = false)
     private MembershipLevel membershipLevel;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
+
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -47,7 +51,15 @@ public class User {
         return membershipLevel;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
     public enum MembershipLevel {
         CLASSIC, GOLD, DIAMOND
+    }
+
+    public enum Role {
+        USER, ADMIN
     }
 }
