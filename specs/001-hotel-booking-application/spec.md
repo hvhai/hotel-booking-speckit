@@ -56,6 +56,68 @@ As a customer, I want to check the refund or penalty amount before cancelling my
 
 ---
 
+### User Story 4 - View Membership Level and Benefits (Priority: P2)
+
+As a user, I want to view my current membership level and the associated benefits (discounts), so I understand what advantages I have when booking.
+
+**Why this priority**: Increases transparency and encourages users to upgrade or maintain their membership.
+
+**Independent Test**: Can be fully tested by logging in as a user and retrieving membership details and discount rates via a dedicated endpoint or profile view.
+
+**Acceptance Scenarios**:
+
+1. **Given** a logged-in user, **When** they view their profile or membership info, **Then** their current membership level and discount rate are displayed.
+2. **Given** a user with any membership, **When** they view benefits, **Then** the discount rates for all levels are shown for comparison.
+
+---
+
+### User Story 5 - Users Can View and Cancel Only Their Own Bookings (Priority: P1)
+
+As a user, I want to view and cancel only the bookings that I own, so that my data is secure and I cannot affect other users' reservations.
+
+**Why this priority**: Ensures privacy and security, and prevents unauthorized actions on other users' bookings.
+
+**Independent Test**: Can be fully tested by attempting to view or cancel bookings as different users and verifying access is restricted to the user's own bookings.
+
+**Acceptance Scenarios**:
+
+1. **Given** a logged-in user, **When** they list their bookings, **Then** only their own bookings are shown.
+2. **Given** a logged-in user, **When** they attempt to view or cancel another user's booking, **Then** access is denied.
+3. **Given** a logged-in user, **When** they cancel their own booking, **Then** the cancellation is processed as per policy.
+
+---
+
+### User Story 6 - Admin Can Create Users and Set/Update Membership Level (Priority: P2)
+
+As an admin, I want to create new users and set or update their membership level, so I can manage the membership system.
+
+**Why this priority**: Enables administrative control over user onboarding and membership management.
+
+**Independent Test**: Can be fully tested by creating users and updating membership levels as an admin, and verifying changes are reflected in user profiles.
+
+**Acceptance Scenarios**:
+
+1. **Given** an admin, **When** they create a new user, **Then** the user is added to the system with a specified membership level.
+2. **Given** an admin, **When** they update a user's membership level, **Then** the new level is saved and visible to the user.
+3. **Given** a non-admin user, **When** they attempt to create or update users, **Then** access is denied.
+
+---
+
+### User Story 7 - Admin Can View All Bookings (Priority: P2)
+
+As an admin, I want to view all bookings in the system, so I can monitor activity and assist with support or reporting.
+
+**Why this priority**: Provides operational oversight and enables support and analytics.
+
+**Independent Test**: Can be fully tested by logging in as an admin and retrieving the full list of bookings, and verifying that non-admins cannot access this data.
+
+**Acceptance Scenarios**:
+
+1. **Given** an admin, **When** they request the list of all bookings, **Then** all bookings in the system are returned.
+2. **Given** a non-admin user, **When** they attempt to view all bookings, **Then** access is denied.
+
+---
+
 ## Functional Requirements
 
 - The system MUST support three membership levels: classic (0% discount), gold (10%), diamond (20%).

@@ -84,6 +84,52 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 
 ---
 
+## Phase 6: User Story 4 (P2) — View Membership Level and Benefits
+
+**Goal:** Users can view their current membership level and see all available benefits/discounts.
+
+**T024. [US4] Implement endpoint for users to view their membership level and benefits**
+- Returns current user's membership level and discount rate, plus a summary of all levels/benefits.
+
+**T025. [US4] Unit and integration tests for membership/benefits endpoint**
+
+---
+
+## Phase 7: User Story 5 (P1) — Users Can View and Cancel Only Their Own Bookings
+
+**Goal:** Users can only view and cancel bookings they own.
+
+**T026. [US5] Implement endpoint to list user's own bookings**
+
+**T027. [US5] Restrict booking cancellation to booking owner**
+- Ensure users cannot view or cancel bookings they do not own.
+
+**T028. [US5] Unit and integration tests for booking ownership and access control**
+
+---
+
+## Phase 8: User Story 6 (P2) — Admin Can Create Users and Set/Update Membership Level
+
+**Goal:** Admins can create users and set/update membership levels.
+
+**T029. [US6] Implement admin endpoint to create users and set membership**
+
+**T030. [US6] Implement admin endpoint to update user membership level**
+
+**T031. [US6] Unit and integration tests for admin user/membership management**
+
+---
+
+## Phase 9: User Story 7 (P2) — Admin Can View All Bookings
+
+**Goal:** Admins can view all bookings in the system.
+
+**T032. [US7] Implement admin endpoint to list all bookings**
+
+**T033. [US7] Unit and integration tests for admin booking listing and access control**
+
+---
+
 ## Final Phase: Polish & Cross-Cutting Concerns
 
 **T021. [Polish] Add structured logging and error handling**
@@ -97,7 +143,7 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 
 ## Dependencies & Parallelization
 
-- T001–T003 (Setup) → T004–T006 (Foundational) → US1 (T007–T011) → US2 (T012–T016) → US3 (T017–T020) → Polish (T021–T023)
+- T001–T003 (Setup) → T004–T006 (Foundational) → US1 (T007–T011) → US2 (T012–T016) → US3 (T017–T020) → US4 (T024–T025) → US5 (T026–T028) → US6 (T029–T031) → US7 (T032–T033) → Polish (T021–T023)
 - Tasks within each user story phase can be done in parallel.
 
 ---
@@ -105,5 +151,3 @@ This file breaks down the implementation into actionable, dependency-ordered tas
 ## MVP Scope
 
 - Complete through US1 (T001–T011): Booking with membership discount, tested and documented.
-
----
