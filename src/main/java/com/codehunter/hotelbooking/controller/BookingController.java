@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -46,7 +47,16 @@ public class BookingController {
             @PathVariable UUID bookingId,
             @AuthenticationPrincipal User user
     ) {
-        // Optionally, you could check if the booking belongs to the user here
+        // Enforce booking ownership: only the owner can cancel
+        String username = user.getUsername();
+        com.codehunter.hotelbooking.model.User appUser = userService.findByUsername(username);
+        // Fetch booking and check ownership
+        com.codehunter.hotelbooking.model.Booking booking = bookingService.getBookingById(bookingId);
+        if (!booking.getUser().getId().equals(appUser.getId())) {
+            // Optionally log unauthorized attempt
+            log.warn("User {} attempted to cancel booking {} not owned by them", username, bookingId);
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
         CancellationResponse response = bookingService.cancelBooking(bookingId, Instant.now());
         return ResponseEntity.ok(response);
     }
@@ -59,5 +69,13 @@ public class BookingController {
         // Optionally, you could check if the booking belongs to the user here
         RefundPreviewResponse response = bookingService.previewRefund(bookingId, Instant.now());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<BookingResponse>> getMyBookings(@AuthenticationPrincipal User user) {
+        String username = user.getUsername();
+        com.codehunter.hotelbooking.model.User appUser = userService.findByUsername(username);
+        List<BookingResponse> bookings = bookingService.getBookingsForUser(appUser.getId());
+        return ResponseEntity.ok(bookings);
     }
 }

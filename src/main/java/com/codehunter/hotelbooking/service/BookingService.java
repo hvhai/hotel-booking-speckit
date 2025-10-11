@@ -18,8 +18,10 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -161,5 +163,30 @@ public class BookingService {
         // In a real system, this would be an HTTP call or SDK integration
         // Here, we just log the action
         System.out.printf("Simulating refund of %s to user %s for booking %s\n", refundAmount, booking.getUser().getUsername(), booking.getId());
+    }
+
+    public List<BookingResponse> getBookingsForUser(UUID userId) {
+        List<Booking> bookings = bookingRepository.findAll().stream()
+                .filter(b -> b.getUser().getId().equals(userId))
+                .collect(Collectors.toList());
+        return bookings.stream().map(b -> {
+            BookingResponse r = new BookingResponse();
+            r.setBookingId(b.getId());
+            r.setUserId(b.getUser().getId());
+            r.setRoomId(b.getRoom().getId());
+            r.setCheckIn(b.getCheckIn());
+            r.setCheckOut(b.getCheckOut());
+            r.setMembershipLevel(BookingResponse.MembershipLevel.valueOf(b.getUser().getMembershipLevel().name()));
+            r.setTotalAmount(b.getTotalAmount());
+            r.setDiscountAmount(b.getDiscountAmount());
+            r.setFinalAmount(b.getFinalAmount());
+            r.setStatus(BookingResponse.Status.valueOf(b.getStatus().name()));
+            return r;
+        }).collect(Collectors.toList());
+    }
+
+    public com.codehunter.hotelbooking.model.Booking getBookingById(UUID bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found: " + bookingId));
     }
 }

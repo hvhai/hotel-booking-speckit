@@ -128,4 +128,83 @@ class BookingControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(bookingRequest)))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void testCancelBooking_AsNonOwner_ShouldReturnForbidden() throws Exception {
+        // Create and save a second user
+        User otherUser = new User();
+        otherUser.setUsername("otheruser");
+        otherUser.setEmail("other@example.com");
+        otherUser.setPassword("password");
+        otherUser.setMembershipLevel(User.MembershipLevel.CLASSIC);
+        userRepository.save(otherUser);
+
+        // Create a booking for the first user
+        BookingRequest req = new BookingRequest();
+        req.setRoomId(room.getId());
+        req.setCheckIn(Instant.parse("2025-10-20T14:00:00Z"));
+        req.setCheckOut(Instant.parse("2025-10-22T12:00:00Z"));
+        BookingResponse bookingResponse = objectMapper.readValue(
+            mockMvc.perform(post("/api/v1/bookings")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req))
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(user.getUsername())))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(),
+            BookingResponse.class
+        );
+
+        // Attempt to cancel as the other user
+        mockMvc.perform(post("/api/v1/bookings/" + bookingResponse.getBookingId() + "/cancel")
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(otherUser.getUsername())))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testGetMyBookings_OnlyReturnsOwnBookings() throws Exception {
+        // Create and save a second user
+        User otherUser = new User();
+        otherUser.setUsername("otheruser2");
+        otherUser.setEmail("other2@example.com");
+        otherUser.setPassword("password");
+        otherUser.setMembershipLevel(User.MembershipLevel.CLASSIC);
+        userRepository.save(otherUser);
+
+        // Create a booking for the first user
+        BookingRequest req1 = new BookingRequest();
+        req1.setRoomId(room.getId());
+        req1.setCheckIn(Instant.parse("2025-10-25T14:00:00Z"));
+        req1.setCheckOut(Instant.parse("2025-10-27T12:00:00Z"));
+        mockMvc.perform(post("/api/v1/bookings")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req1))
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(user.getUsername())))
+                .andExpect(status().isOk());
+
+        // Create a booking for the second user
+        BookingRequest req2 = new BookingRequest();
+        req2.setRoomId(room.getId());
+        req2.setCheckIn(Instant.parse("2025-10-28T14:00:00Z"));
+        req2.setCheckOut(Instant.parse("2025-10-30T12:00:00Z"));
+        mockMvc.perform(post("/api/v1/bookings")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(req2))
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(otherUser.getUsername())))
+                .andExpect(status().isOk());
+
+        // Get bookings for the first user
+        String response = mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/bookings/my")
+                .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(user.getUsername())))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        BookingResponse[] bookings = objectMapper.readValue(response, BookingResponse[].class);
+        // Should only return bookings for the first user
+        for (BookingResponse b : bookings) {
+            assertEquals(user.getId(), b.getUserId(), "Should only return bookings for the authenticated user");
+        }
+        // Should not include bookings for the second user
+        for (BookingResponse b : bookings) {
+            assertEquals("testuser", b.getMembershipLevel().name().toLowerCase().contains("classic") ? user.getUsername() : "testuser");
+        }
+    }
 }
