@@ -1,6 +1,7 @@
 package com.codehunter.hotelbooking.controller;
 
 import com.codehunter.hotelbooking.dto.MembershipInfoResponse;
+import com.codehunter.hotelbooking.dto.UserDetailsResponse;
 import com.codehunter.hotelbooking.model.User;
 import com.codehunter.hotelbooking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,17 @@ public class UserController {
         MembershipInfoResponse response = MembershipInfoResponse.fromUser(appUser);
         return ResponseEntity.ok(response);
     }
-}
 
+    @GetMapping("")
+    public ResponseEntity<UserDetailsResponse> getUserDetails(@AuthenticationPrincipal UserDetails principal) {
+        String username = principal.getUsername();
+        User appUser = userService.findByUsername(username);
+        UserDetailsResponse response = new UserDetailsResponse(
+                appUser.getUsername(),
+                appUser.getEmail(),
+                appUser.getRole().name(),
+                appUser.getMembershipLevel().name()
+        );
+        return ResponseEntity.ok(response);
+    }
+}
