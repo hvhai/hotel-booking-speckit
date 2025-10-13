@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 @RestController
-@RequestMapping("/api/assistant")
+@RequestMapping("/api/v1/assistant")
 @RequiredArgsConstructor
 public class AssistantController {
     private final AssistantService assistantService;
