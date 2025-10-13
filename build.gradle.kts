@@ -24,11 +24,13 @@ repositories {
     mavenCentral()
 }
 
+extra["springAiVersion"] = "1.0.0"
 
 dependencies {
     // Spring Boot Starters
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
@@ -40,9 +42,18 @@ dependencies {
     runtimeOnly("com.h2database:h2")
     runtimeOnly("org.postgresql:postgresql")
 
+    // Spring AI
+    implementation("org.springframework.ai:spring-ai-starter-model-openai")
+
     // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+
+    // Logging
+    implementation("org.zalando:logbook-spring-boot-starter:3.12.2")
+
+    // OpenAPI/Swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.0")
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -52,10 +63,19 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // OpenAPI/Swagger
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.0")
+
+    if (System.getProperty("os.arch") == "aarch64") {
+        // MacOSDnsServerAddressStreamProvider error on mac m1: (https://github.com/netty/netty/issues/11020)
+        runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.94.Final:osx-aarch_64")
+    }
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.ai:spring-ai-bom:${property("springAiVersion")}")
+        mavenBom("com.vaadin:vaadin-bom:24.3.5")
+    }
+}
 
 tasks.withType<Test> {
     useJUnitPlatform()
