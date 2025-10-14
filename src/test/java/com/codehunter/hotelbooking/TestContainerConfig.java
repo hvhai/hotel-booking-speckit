@@ -9,7 +9,8 @@ import org.testcontainers.junit.jupiter.Container;
 @TestConfiguration(proxyBeanMethods = false)
 public class TestContainerConfig {
     @Container
-    static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17.2")
+//    static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17.2")
+    static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("pgvector/pgvector:0.8.1-pg18-trixie")
             .withDatabaseName("testdb")
             .withUsername("test")
             .withPassword("test");

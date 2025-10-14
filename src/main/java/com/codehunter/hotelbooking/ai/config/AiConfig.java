@@ -50,7 +50,7 @@ public class AiConfig {
     }
 
     @Bean
-    public OpenAiChatModel copilotOpenAiChatModel(
+    public OpenAiApi openAiApi(
             CopilotTokenService copilotTokenService,
             @Value("${app.ai.copilot.openai.chat.base-url}") String copilotBaseUrl,
             @Value("${app.ai.copilot.openai.chat.completions-path}") String copilotCompletionsPath,
@@ -65,7 +65,7 @@ public class AiConfig {
         httpHeaders.add("Editor-Version", copilotEditorVersion);
         httpHeaders.add("X-Initiator", copilotXInitiator);
         httpHeaders.add("X-Request-Id", UUID.randomUUID().toString());
-        OpenAiApi openAiApi = OpenAiApi.builder()
+        return OpenAiApi.builder()
                 .baseUrl(copilotBaseUrl)
                 .completionsPath(copilotCompletionsPath)
                 .restClientBuilder(RestClient.builder()
@@ -84,6 +84,10 @@ public class AiConfig {
                 .apiKey(new NoopApiKey()) // Use NoopApiKey since we're handling auth via headers
                 .headers(httpHeaders)
                 .build();
+    }
+
+    @Bean
+    public OpenAiChatModel copilotOpenAiChatModel(OpenAiApi openAiApi ) {
         return OpenAiChatModel.builder()
                 .openAiApi(openAiApi)
                 .build();
