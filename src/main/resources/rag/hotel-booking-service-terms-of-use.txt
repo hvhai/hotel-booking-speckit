@@ -1,0 +1,35 @@
+Hotel Booking Application – Terms of Service
+
+1. Membership & Eligibility
+   - Only registered members (Classic, Gold, Diamond) may book rooms.
+   - Membership level is assigned at booking and cannot be changed retroactively for existing bookings.
+
+2. Discounts
+   - Classic: 0% discount.
+   - Gold: 10% discount.
+   - Diamond: 20% discount.
+   - Discounts are automatically applied to booking totals and reflected in invoices.
+
+3. Booking & Cancellations
+   - Bookings can only be made and managed by logged-in members.
+   - Only future bookings (with a check-in date in the future) are eligible for cancellation.
+   - Members may only view and cancel their own bookings.
+
+4. Refund & Penalty Policy
+   - Cancellations more than 48 hours before check-in: 100% refund.
+   - Cancellations 24–48 hours before check-in: 50% refund.
+   - Cancellations less than 24 hours before check-in: no refund.
+   - Refunds are processed automatically via the payment gateway.
+
+5. Transparency
+   - The system provides clear information on discounts, refund, and penalty amounts before and after booking or cancellation.
+   - All calculations are accurate and auditable.
+
+6. Administration
+   - Only administrators may create users or change membership levels.
+   - Administrators may view all bookings; regular users may only view their own.
+
+7. General
+   - All times are calculated in the hotel’s local timezone.
+   - Use of the system implies acceptance of these terms.
+   - The hotel reserves the right to update these terms as needed.
