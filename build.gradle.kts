@@ -24,7 +24,7 @@ repositories {
     mavenCentral()
 }
 
-extra["springAiVersion"] = "1.0.0"
+extra["springAiVersion"] = "1.1.0-M3"
 
 dependencies {
     // Spring Boot Starters
@@ -43,7 +43,12 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
 
     // Spring AI
+    // OpenAI model
     implementation("org.springframework.ai:spring-ai-starter-model-openai")
+    // Google GenAI model
+    implementation("org.springframework.ai:spring-ai-starter-model-google-genai")
+    implementation("org.springframework.ai:spring-ai-starter-model-google-genai-embedding")
+    // rag
     implementation("org.springframework.ai:spring-ai-rag")
     implementation("org.springframework.ai:spring-ai-starter-vector-store-pgvector")
     implementation("org.springframework.ai:spring-ai-advisors-vector-store")
@@ -77,7 +82,7 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom("org.springframework.ai:spring-ai-bom:${property("springAiVersion")}")
-        mavenBom("com.vaadin:vaadin-bom:24.3.5")
+//        mavenBom("com.vaadin:vaadin-bom:24.3.5")
     }
 }
 
