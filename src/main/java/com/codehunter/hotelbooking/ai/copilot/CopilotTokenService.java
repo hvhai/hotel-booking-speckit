@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Profile("openai")
 @Component
 @Slf4j
 public class CopilotTokenService {

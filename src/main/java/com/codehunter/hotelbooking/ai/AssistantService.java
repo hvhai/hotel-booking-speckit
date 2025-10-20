@@ -1,5 +1,7 @@
 package com.codehunter.hotelbooking.ai;
 
+import com.codehunter.hotelbooking.ai.tool.BookingTools;
+import com.codehunter.hotelbooking.ai.tool.DateTimeTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class AssistantService {
     private final ChatClient chatClient;
+    private final BookingTools bookingTools;
+    private final DateTimeTools dateTimeTools;
 
     public Answer askQuestion(Question question) {
         String response = chatClient.prompt()
@@ -20,7 +24,8 @@ public class AssistantService {
 
     public Flux<String> streamQuestion(Question question) {
         return chatClient.prompt()
-                        .user(question.question())
+                .user(question.question())
+                .tools(dateTimeTools, bookingTools)
                 .stream()
                 .content();
     }

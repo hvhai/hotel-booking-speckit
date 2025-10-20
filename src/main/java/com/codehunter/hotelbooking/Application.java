@@ -6,8 +6,10 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
+import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor;
 
 @SpringBootApplication
 public class Application {
@@ -23,4 +25,12 @@ public class Application {
                 new TokenTextSplitter().transform(
                         new TextReader(termsOfServiceDocs).read()));
     }
+
+    @Bean
+    RestClientCustomizer logbookCustomizer(
+            LogbookClientHttpRequestInterceptor interceptor) {
+        return restClient -> restClient.requestInterceptor(interceptor);
+    }
+
+
 }

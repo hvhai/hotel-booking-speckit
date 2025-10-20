@@ -4,6 +4,7 @@ import com.codehunter.hotelbooking.ai.copilot.CopilotTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
@@ -19,6 +20,7 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.LinkedMultiValueMap;
@@ -32,16 +34,17 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @Configuration
-@Profile("openai")
 @Slf4j
 public class OpenAiConfig {
     @Bean
+    @Profile("openai")
     public ChatMemory chatMemory() {
         return MessageWindowChatMemory.builder()
                 .maxMessages(5)
                 .build();
     }
 
+    @Profile("openai")
     @Bean
     public ChatClient chatClient(ChatMemory chatMemory,
                                  OpenAiChatModel openAiChatModel,
@@ -67,6 +70,7 @@ public class OpenAiConfig {
                         Use the provided functions to fetch booking details, change bookings, and cancel bookings.
                         """)
                 .defaultAdvisors(
+                        new SimpleLoggerAdvisor(),
                         PromptChatMemoryAdvisor.builder(chatMemory).build(),
                         QuestionAnswerAdvisor.builder(vectorStore).build())
                 .build();
@@ -130,6 +134,8 @@ public class OpenAiConfig {
     }
 
     @Bean
+    @Profile("openai")
+    @Primary
     public OpenAiEmbeddingModel openAiEmbeddingModel(@Value("${spring.ai.openai.embedding.api-key}") String personalOpenAiApiKey) {
         OpenAiApi openAiApi = OpenAiApi.builder()
                 .apiKey(personalOpenAiApiKey)

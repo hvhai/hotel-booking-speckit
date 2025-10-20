@@ -11,6 +11,7 @@ import com.codehunter.hotelbooking.model.User.MembershipLevel;
 import com.codehunter.hotelbooking.repository.BookingRepository;
 import com.codehunter.hotelbooking.repository.RoomRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
@@ -32,6 +33,7 @@ public class BookingService {
 
     @Transactional
     public BookingResponse createBooking(BookingRequest request, User user) {
+        log.info("Creating booking for user {}: room {}, check-in {}, check-out {}", user.getUsername(), request.getRoomId(), request.getCheckIn(), request.getCheckOut());
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
         // Calculate nights (calendar days, ignore time)
@@ -80,6 +82,7 @@ public class BookingService {
     }
 
     public CancellationResponse cancelBooking(UUID bookingId, Instant cancelTime) {
+        log.info("Cancel booking {}", bookingId);
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found: " + bookingId));
         if (booking.getStatus() == Booking.Status.CANCELLED) {
@@ -123,6 +126,7 @@ public class BookingService {
     }
 
     public RefundPreviewResponse previewRefund(UUID bookingId, Instant previewTime) {
+        log.info("Previewing refund for booking {} at {}", bookingId, previewTime);
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found: " + bookingId));
         if (booking.getStatus() == Booking.Status.CANCELLED) {
@@ -166,6 +170,7 @@ public class BookingService {
     }
 
     public List<BookingResponse> getBookingsForUser(UUID userId) {
+        log.info("Getting bookings for user {}", userId);
         List<Booking> bookings = bookingRepository.findAll().stream()
                 .filter(b -> b.getUser().getId().equals(userId))
                 .collect(Collectors.toList());
@@ -186,6 +191,7 @@ public class BookingService {
     }
 
     public List<BookingResponse> getAllBookings() {
+        log.info("Getting all bookings");
         List<Booking> bookings = bookingRepository.findAll();
         return bookings.stream().map(this::toBookingResponse).collect(Collectors.toList());
     }
@@ -206,6 +212,7 @@ public class BookingService {
     }
 
     public com.codehunter.hotelbooking.model.Booking getBookingById(UUID bookingId) {
+        log.info("Getting booking by id {}", bookingId);
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found: " + bookingId));
     }
