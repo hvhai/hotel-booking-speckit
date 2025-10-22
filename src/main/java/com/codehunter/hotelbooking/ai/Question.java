@@ -1,4 +1,4 @@
 package com.codehunter.hotelbooking.ai;
 
-public record Question(String question) {
+public record Question(String question, String chatId) {
 }
