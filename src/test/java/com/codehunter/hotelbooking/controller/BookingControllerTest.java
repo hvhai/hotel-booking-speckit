@@ -1,5 +1,6 @@
 package com.codehunter.hotelbooking.controller;
 
+import com.codehunter.hotelbooking.TestContainerConfig;
 import com.codehunter.hotelbooking.dto.BookingRequest;
 import com.codehunter.hotelbooking.dto.BookingResponse;
 import com.codehunter.hotelbooking.model.User;
@@ -9,9 +10,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,7 +31,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(BookingController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@Import(TestContainerConfig.class)
+@ActiveProfiles("gemini")
 class BookingControllerTest {
 
     @Autowired

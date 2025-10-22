@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(TestContainerConfig.class)
 @Transactional
+@ActiveProfiles("gemini")
 class BookingControllerRefundPreviewIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -71,9 +72,12 @@ class BookingControllerRefundPreviewIntegrationTest {
         bookingRequest.setCheckOut(Instant.now().plusSeconds(60 * 60 * 96)); // 96h from now
 
         MvcResult result = mockMvc.perform(post("/api/v1/bookings")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(bookingRequest))
-                .with(request -> { request.setRemoteUser("previewuser"); return request; }))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookingRequest))
+                        .with(request -> {
+                            request.setRemoteUser("previewuser");
+                            return request;
+                        }))
                 .andExpect(status().isOk())
                 .andReturn();
         String content = result.getResponse().getContentAsString();
