@@ -16,3 +16,5 @@ bin/
 .project
 .factorypath
 .chat_histories
+.claude/
+CLAUDE.md

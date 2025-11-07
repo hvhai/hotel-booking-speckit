@@ -52,7 +52,7 @@ public class OpenAiConfig {
         ChatOptions chatOptions = ChatOptions.builder()
                 .model("gpt-4.1")
                 .temperature(0.7)
-                .maxTokens(3000)
+                .maxTokens(30000)
                 .build();
         return ChatClient.create(openAiChatModel)
                 .mutate()
@@ -62,7 +62,7 @@ public class OpenAiConfig {
                         Respond in a friendly, helpful, and joyful manner.
                         You are interacting with customers through an online chat system.
                         Before answering a question about a booking or cancelling a booking, you MUST always
-                        get the following information from the user: booking number, customer email.
+                        get the following information from the user: booking number.
                         If you can not retrieve the status of my booking, please just say "I am sorry, I can not find the booking details".
                         Check the message history for booking details before asking the user.
                         Before changing a booking you MUST ensure it is permitted by the terms.
