@@ -10,3 +10,9 @@ app/target/citrus-reports
 .vscode/
 # Ignore Gradle build output directory
 build
+bin/
+.settings
+.classpath
+.project
+.factorypath
+.chat_histories
