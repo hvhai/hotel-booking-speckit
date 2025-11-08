@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 public class Room {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false, unique = true)
