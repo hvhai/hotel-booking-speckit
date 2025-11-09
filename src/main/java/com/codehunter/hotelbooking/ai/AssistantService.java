@@ -5,8 +5,11 @@ import com.codehunter.hotelbooking.ai.tool.DateTimeTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.messages.Message;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +17,7 @@ public class AssistantService {
     private final ChatClient chatClient;
     private final BookingTools bookingTools;
     private final DateTimeTools dateTimeTools;
+    private final ChatMemory chatMemory;
 
     public Answer askQuestion(Question question) {
         String response = chatClient.prompt()
@@ -32,4 +36,12 @@ public class AssistantService {
                 .content();
     }
 
+    // fetching chat history from ChatMemory based on chatId can be added here if needed
+    public List<Message> fetchChatHistory(String chatId) {
+        // Implementation for fetching chat history
+        List<Message> messages = chatMemory.get(chatId);
+        return messages;
+
+
+    }
 }
