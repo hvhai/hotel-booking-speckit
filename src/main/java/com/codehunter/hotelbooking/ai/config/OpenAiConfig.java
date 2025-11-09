@@ -40,7 +40,7 @@ public class OpenAiConfig {
     @Profile("openai")
     public ChatMemory chatMemory() {
         return MessageWindowChatMemory.builder()
-                .maxMessages(5)
+                .maxMessages(50)
                 .build();
     }
 

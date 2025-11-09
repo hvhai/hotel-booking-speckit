@@ -6,6 +6,8 @@ import com.codehunter.hotelbooking.model.User.MembershipLevel;
 import com.codehunter.hotelbooking.repository.RoomRepository;
 import com.codehunter.hotelbooking.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -22,15 +25,19 @@ public class ApplicationBootstrapper implements ApplicationListener<ContextRefre
     private final PasswordEncoder passwordEncoder;
     private final String defaultPassword;
     private final RoomRepository roomRepository;
+    private final VectorStore vectorStore;
 
     public ApplicationBootstrapper(UserRepository userRepository,
                                    PasswordEncoder passwordEncoder,
                                    @Value("${app.default-user-password}") String defaultPassword,
-                                   RoomRepository roomRepository) {
+                                   RoomRepository roomRepository,
+                                   VectorStore vectorStore) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.defaultPassword = defaultPassword;
         this.roomRepository = roomRepository;
+        this.vectorStore = vectorStore;
+
     }
 
     @Override
@@ -84,6 +91,7 @@ public class ApplicationBootstrapper implements ApplicationListener<ContextRefre
             room.setPricePerNight(pricePerNight);
             Room save = roomRepository.save(room);
             log.info("Created room: {} ", save);
+            vectorStore.add(List.of(new Document("Room id:%s, Type:%s, PricePerNight:%s".formatted(save.getId(), save.getType(), save.getPricePerNight()))));
         }
     }
 
