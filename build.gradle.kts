@@ -60,6 +60,15 @@ dependencies {
 
     // Logging
     implementation("org.zalando:logbook-spring-boot-starter:3.12.2")
+    implementation("com.github.loki4j:loki-logback-appender:1.5.1")
+
+    // Tracing
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+    implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+
+    // Metric
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
     // OpenAPI/Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.0")

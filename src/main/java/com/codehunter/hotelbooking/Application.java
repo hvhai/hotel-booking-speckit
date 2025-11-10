@@ -17,7 +17,7 @@ public class Application {
         org.springframework.boot.SpringApplication.run(Application.class, args);
     }
 
-    @Bean
+//    @Bean
     CommandLineRunner ingestTermOfServiceToVectorStore(VectorStore vectorStore,
                                                        @Value("classpath:rag/hotel-booking-service-terms-of-use.txt") Resource termsOfServiceDocs) {
 
