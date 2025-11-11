@@ -49,9 +49,11 @@ public class OpenAiConfig {
     @Bean
     public ChatClient chatClient(ChatMemory chatMemory,
                                  OpenAiChatModel openAiChatModel,
+                                 @Value("${app.ai.copilot.openai.chat.model}")String model,
                                  VectorStore vectorStore, CalculationTools calculationTools) {
         ChatOptions chatOptions = ChatOptions.builder()
-                .model("gpt-4.1")
+//                .model("gpt-4.1")
+                .model(model)
                 .temperature(0.7)
                 .maxTokens(30000)
                 .build();
