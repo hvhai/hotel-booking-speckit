@@ -1,6 +1,7 @@
 package com.codehunter.hotelbooking.ai.config;
 
 import com.codehunter.hotelbooking.ai.copilot.CopilotTokenService;
+import com.codehunter.hotelbooking.ai.tool.CalculationTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
@@ -48,7 +49,7 @@ public class OpenAiConfig {
     @Bean
     public ChatClient chatClient(ChatMemory chatMemory,
                                  OpenAiChatModel openAiChatModel,
-                                 VectorStore vectorStore) {
+                                 VectorStore vectorStore, CalculationTools calculationTools) {
         ChatOptions chatOptions = ChatOptions.builder()
                 .model("gpt-4.1")
                 .temperature(0.7)
@@ -57,6 +58,7 @@ public class OpenAiConfig {
         return ChatClient.create(openAiChatModel)
                 .mutate()
                 .defaultOptions(chatOptions)
+                .defaultTools(calculationTools)
                 .defaultSystem("""
                         You are a customer chat support agent of Hotel named "18 plus"."
                         Respond in a friendly, helpful, and joyful manner.
