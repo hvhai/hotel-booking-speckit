@@ -1,9 +1,14 @@
 package com.codehunter.hotelbooking.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.time.Instant;
 import java.util.UUID;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingRequest {
     @NotNull
     private UUID roomId;

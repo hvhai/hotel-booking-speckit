@@ -1,6 +1,8 @@
 package com.codehunter.hotelbooking.ai;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,13 +17,14 @@ public class AssistantController {
     private final AssistantService assistantService;
 
     @PostMapping("/ask")
-    public Answer askQuestion(@RequestBody Question question) {
-        return assistantService.askQuestion(question);
+    public Answer askQuestion(@RequestBody Question question, @AuthenticationPrincipal User user) {
+        return assistantService.askQuestion(question, user.getUsername());
     }
 
     @PostMapping("/stream/ask")
-    public Flux<String> askStreamQuestion(@RequestBody Question question) {
-        return assistantService.streamQuestion(question);
+    public Flux<String> askStreamQuestion(@RequestBody Question question,
+                                          @AuthenticationPrincipal User user) {
+        return assistantService.streamQuestion(question, user.getUsername());
     }
 
     @GetMapping("/history/{chatId}")

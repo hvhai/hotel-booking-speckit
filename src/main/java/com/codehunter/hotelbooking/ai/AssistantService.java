@@ -1,5 +1,6 @@
 package com.codehunter.hotelbooking.ai;
 
+import com.codehunter.hotelbooking.ai.advisor.UsernameSystemAdvisor;
 import com.codehunter.hotelbooking.ai.tool.BookingTools;
 import com.codehunter.hotelbooking.ai.tool.DateTimeTools;
 import lombok.RequiredArgsConstructor;
@@ -19,19 +20,24 @@ public class AssistantService {
     private final DateTimeTools dateTimeTools;
     private final ChatMemory chatMemory;
 
-    public Answer askQuestion(Question question) {
+    public Answer askQuestion(Question question, String username) {
         String response = chatClient.prompt()
                 .user(question.question())
+                .advisors(advisorSpec -> advisorSpec
+                        .param(ChatMemory.CONVERSATION_ID, question.chatId())
+                        .advisors(new UsernameSystemAdvisor(username)))
                 .call()
                 .content();
         return new Answer(response);
     }
 
-    public Flux<String> streamQuestion(Question question) {
+    public Flux<String> streamQuestion(Question question, String username) {
         return chatClient.prompt()
                 .user(question.question())
                 .tools(dateTimeTools, bookingTools)
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, question.chatId()))
+                .advisors(advisorSpec -> advisorSpec
+                        .param(ChatMemory.CONVERSATION_ID, question.chatId())
+                        .advisors(new UsernameSystemAdvisor(username)))
                 .stream()
                 .content();
     }
