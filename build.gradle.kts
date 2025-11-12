@@ -45,9 +45,6 @@ dependencies {
     // Spring AI
     // OpenAI model
     implementation("org.springframework.ai:spring-ai-starter-model-openai")
-    // Google GenAI model
-    implementation("org.springframework.ai:spring-ai-starter-model-google-genai")
-    implementation("org.springframework.ai:spring-ai-starter-model-google-genai-embedding")
     // rag
     implementation("org.springframework.ai:spring-ai-rag")
     implementation("org.springframework.ai:spring-ai-starter-vector-store-pgvector")
