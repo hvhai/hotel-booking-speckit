@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -26,7 +27,10 @@ public class Application {
     CommandLineRunner ingestTermOfServiceToVectorStore(VectorStore vectorStore,
                                                        @Value("classpath:rag/hotel-booking-service-terms-of-use.txt") Resource termsOfServiceDocs) {
 
-        List<Document> documents = vectorStore.similaritySearch("What is the cancellation policy for bookings?");
+        List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
+                .query("Terms of Service")
+                .similarityThreshold(0.45)
+                .build());
         if (documents.isEmpty()) {
             return args -> vectorStore.write(
                     new TokenTextSplitter().transform(
