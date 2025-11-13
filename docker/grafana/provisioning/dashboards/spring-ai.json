@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
   "links": [],
   "panels": [
     {
@@ -32,52 +31,13 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
             }
           },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "reqps"
+          "mappings": []
         },
         "overrides": []
       },
@@ -87,13 +47,24 @@
         "x": 0,
         "y": 0
       },
-      "id": 5,
+      "id": 16,
       "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
         "tooltip": {
           "mode": "single",
@@ -108,18 +79,18 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(gen_ai_operation_name, error, gen_ai_system, gen_ai_request_model) (rate(gen_ai_client_operation_seconds_count{application=\"$application\"}[$__rate_interval]))",
+          "expr": "sum by(spring_ai_tool_definition_name) (spring_ai_tool_seconds_count{application=\"$application\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{gen_ai_operation_name}} ({{gen_ai_system}}/{{gen_ai_request_model}}) - {{error}}",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "A",
           "useBackend": false
         }
       ],
-      "title": "Models Throughput",
-      "type": "timeseries"
+      "title": "Tool Call",
+      "type": "piechart"
     },
     {
       "datasource": {
@@ -276,7 +247,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "topk(10, sum by(gen_ai_operation_name, gen_ai_system, gen_ai_request_model) (increase(gen_ai_client_operation_seconds_count{application=\"$application\", error=\"none\"}[$__rate_interval])))",
+          "expr": "sum by(gen_ai_operation_name, gen_ai_system, gen_ai_request_model) (gen_ai_client_operation_seconds_count{application=\"$application\", error=\"none\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -459,7 +430,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": -1,
+            "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -469,7 +440,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "stepBefore",
+            "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -499,23 +470,21 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "reqps"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
         "x": 0,
         "y": 8
       },
-      "id": 7,
+      "id": 5,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -532,34 +501,17 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(error, gen_ai_operation_name, gen_ai_system, gen_ai_request_model) (gen_ai_client_operation_seconds_bucket{application=\"$application\"})",
+          "expr": "sum by(gen_ai_operation_name, error, gen_ai_system, gen_ai_request_model) (rate(gen_ai_client_operation_seconds_count{application=\"$application\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "Max - {{gen_ai_operation_name}} ({{gen_ai_system}}/{{gen_ai_request_model}}) - {{error}}",
+          "legendFormat": "{{gen_ai_operation_name}} ({{gen_ai_system}}/{{gen_ai_request_model}}) - {{error}}",
           "range": true,
           "refId": "A",
           "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "histogram_quantile(0.99, sum by(le, gen_ai_operation_name, gen_ai_request_model, error, gen_ai_system) (rate(gen_ai_client_operation_seconds_bucket{application=\"$application\"}[$__rate_interval])))",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "Tp99 - {{gen_ai_operation_name}} ({{gen_ai_system}}/{{gen_ai_request_model}}) - {{error}}",
-          "range": true,
-          "refId": "B",
-          "useBackend": false
         }
       ],
-      "title": "Models Latency",
+      "title": "Models Throughput",
       "type": "timeseries"
     },
     {
@@ -679,7 +631,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": 0,
+            "barAlignment": -1,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -689,7 +641,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepBefore",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -719,7 +671,7 @@
               }
             ]
           },
-          "unit": "reqps"
+          "unit": "s"
         },
         "overrides": []
       },
@@ -727,13 +679,15 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 16
       },
-      "id": 11,
+      "id": 7,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -750,17 +704,34 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(db_system, db_operation_name, error) (rate(db_vector_client_operation_seconds_count{application=\"$application\"}[$__rate_interval]))",
+          "expr": "max by(error, gen_ai_operation_name, gen_ai_system, gen_ai_request_model) (gen_ai_client_operation_seconds_bucket{application=\"$application\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{db_system}}-{{db_operation_name}}-{{error}}",
+          "legendFormat": "Max - {{gen_ai_operation_name}} ({{gen_ai_system}}/{{gen_ai_request_model}}) - {{error}}",
           "range": true,
           "refId": "A",
           "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.99, sum by(le, gen_ai_operation_name, gen_ai_request_model, error, gen_ai_system) (rate(gen_ai_client_operation_seconds_bucket{application=\"$application\"}[$__rate_interval])))",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Tp99 - {{gen_ai_operation_name}} ({{gen_ai_system}}/{{gen_ai_request_model}}) - {{error}}",
+          "range": true,
+          "refId": "B",
+          "useBackend": false
         }
       ],
-      "title": "Vector DB Throughput",
+      "title": "Models Latency",
       "type": "timeseries"
     },
     {
@@ -884,129 +855,6 @@
     },
     {
       "datasource": {
-        "type": "tempo",
-        "uid": "tempo"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "filterable": true,
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 26
-      },
-      "id": 2,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "enablePagination": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
-      },
-      "pluginVersion": "11.1.4",
-      "targets": [
-        {
-          "datasource": {
-            "type": "tempo",
-            "uid": "tempo"
-          },
-          "filters": [
-            {
-              "id": "df333216",
-              "operator": "=",
-              "scope": "span"
-            },
-            {
-              "id": "service-name",
-              "operator": "=",
-              "scope": "resource",
-              "tag": "service.name",
-              "value": [
-                "$application"
-              ],
-              "valueType": "string"
-            }
-          ],
-          "limit": 20,
-          "queryType": "traceqlSearch",
-          "refId": "A",
-          "tableType": "traces"
-        }
-      ],
-      "title": "Search Traces $application",
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "loki"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 26
-      },
-      "id": 3,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "loki"
-          },
-          "editorMode": "builder",
-          "expr": "{application=\"$application\", level=\"ERROR\"} |= ``",
-          "key": "Q-c4da21a7-15df-431b-87ab-94abe3840b04-0",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Error Logs",
-      "type": "logs"
-    },
-    {
-      "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
       },
@@ -1069,9 +917,9 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 34
+        "y": 25
       },
-      "id": 14,
+      "id": 11,
       "options": {
         "legend": {
           "calcs": [],
@@ -1092,18 +940,140 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(error, spring_ai_chat_client_stream) (rate(spring_ai_chat_client_seconds_count{application=\"$application\"}[$__rate_interval]))",
+          "expr": "sum by(db_system, db_operation_name, error) (rate(db_vector_client_operation_seconds_count{application=\"$application\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "Stream: {{spring_ai_chat_client_stream}} - {{error}}",
+          "legendFormat": "{{db_system}}-{{db_operation_name}}-{{error}}",
           "range": true,
           "refId": "A",
           "useBackend": false
         }
       ],
-      "title": "Chat Client Throughput",
+      "title": "Vector DB Throughput",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 26
+      },
+      "id": 3,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "builder",
+          "expr": "{application=\"$application\", level=\"ERROR\"} |= ``",
+          "key": "Q-c4da21a7-15df-431b-87ab-94abe3840b04-0",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Logs",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "11.1.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "filters": [
+            {
+              "id": "df333216",
+              "operator": "=",
+              "scope": "span"
+            },
+            {
+              "id": "service-name",
+              "operator": "=",
+              "scope": "resource",
+              "tag": "service.name",
+              "value": [
+                "$application"
+              ],
+              "valueType": "string"
+            }
+          ],
+          "limit": 200,
+          "queryType": "traceqlSearch",
+          "refId": "A",
+          "tableType": "traces"
+        }
+      ],
+      "title": "Search Traces $application",
+      "type": "table"
     },
     {
       "datasource": {
@@ -1152,8 +1122,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1223,6 +1192,105 @@
       ],
       "title": "Chat Client Latency",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 42
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "sum by(error, spring_ai_chat_client_stream) (rate(spring_ai_chat_client_seconds_count{application=\"$application\"}[$__rate_interval]))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Stream: {{spring_ai_chat_client_stream}} - {{error}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Chat Client Throughput",
+      "type": "timeseries"
     }
   ],
   "refresh": "5s",
@@ -1233,8 +1301,8 @@
       {
         "current": {
           "selected": false,
-          "text": "ai-observability-demo",
-          "value": "ai-observability-demo"
+          "text": "hotel-booking-assistant",
+          "value": "hotel-booking-assistant"
         },
         "datasource": {
           "type": "prometheus",
@@ -1260,13 +1328,13 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Spring AI",
   "uid": "edxvmkn39u670c",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
